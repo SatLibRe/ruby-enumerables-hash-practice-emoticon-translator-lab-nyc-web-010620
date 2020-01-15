@@ -20,34 +20,36 @@ require 'pry'
 
 def load_library(path)
   emoticons = YAML.load_file(path)
-  emoticon_hash = {}
-  emoticon_hash["get_meaning"] = {}
-  emoticon_hash["get_emoticon"] = {}
-    
-    emoticons.each do |english,emoticons_array|
-      emoticon_hash["get_emoticon"][emoticons_array[0]] = emoticons_array[1]
-      emoticon_hash["get_meaning"][emoticons_array[1]] = english
+    new_emoticons_hash = {}
+      new_emoticons_hash["get_meaning"] = {}
+      new_emoticons_hash["get_emoticon"] = {}
+    emoticons.each do |english,emoticon_array|
+      new_emoticons_hash["get_meaning"][emoticon_array[1]] = english
+      new_emoticons_hash["get_emoticon"][emoticon_array[0]] = emoticon_array[1]
+    end
+    new_emoticons_hash
+end
+
+def get_japanese_emoticon(path,emoticon)
+  new_emoticons_hash = load_library(path)
+    if new_emoticons_hash["get_emoticon"][emoticon] == nil
+      return "Sorry, that emoticon was not found"
     end 
-    emoticon_hash
+    new_emoticons_hash["get_emoticon"][emoticon] 
 end 
 
 def get_japanese_emoticon(path,emoticon)
-  emoticon_hash = load_library(path)
-  output = emoticon_hash["get_emoticon"][emoticon]
-    if output == nil
+  new_emoticons_hash = load_library(path)
+    if new_emoticons_hash["get_emoticon"][emoticon] == nil
       return "Sorry, that emoticon was not found"
     end 
-  output
-end 
+    new_emoticons_hash["get_emoticon"][emoticon] 
+end
 
 def get_english_meaning(path,emoticon)
-  emoticon_hash = load_library(path)
-  output = emoticon_hash["get_meaning"][emoticon]
-    if output == nil 
+  new_emoticons_hash = load_library(path)
+    if new_emoticons_hash["get_meaning"][emoticon] == nil
       return "Sorry, that emoticon was not found"
     end 
-    output
-end 
-
-
-
+    new_emoticons_hash["get_meaning"][emoticon] 
+end
